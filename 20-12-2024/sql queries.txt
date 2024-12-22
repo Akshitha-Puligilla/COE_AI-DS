@@ -1,26 +1,69 @@
-1)select *from students where city="pune"
-2)select *from students where city="pune" or city="bengaluru";
-3)select *from student (city="bengaluru") or(city="pune" and gender="male") or(city="hyderabad" and gender="female");
-4)select *from student where (city="hyderabad" and(gender="male" and marks>7.5) or (gender="female" and marks>8.0)) or (city="pune" and gender="male") and city!="bengaluru";
-5)select *from student where (marks>7.0 and marks<8.0) and (city="hyderabad" or city="bengaluru");
-6)select *from student where sname like "a%A";
-7)select count(sno),city from student group by city;
-8)select city,avg(marks) as average_marks  from student group by city order by average_marks desc;
-9)select city,max(marks) as marks from student group by city;
-10)select *from student where city="hyderabad" order by marks desc limit 1;
+1)Display students whose city is pune
+--->select *from students where city="pune"
+
+2)Display students whose city is pune or bengaluru
+--->select *from students where city="pune" or city="bengaluru";
+
+3)Display male students from pune,female students from hyderabad and all students from bengaluru.
+--->select *from student (city="bengaluru") or(city="pune" and gender="male") or(city="hyderabad" and gender="female");
+
+4)Display student details from city hyderabad male students whose marks are greather than .5 and female students whose marks are greather than 8.0 or male students from pune ande students who are not from bengaluru.
+--->select *from student where (city="hyderabad" and(gender="male" and marks>7.5) or (gender="female" and marks>8.0)) or (city="pune"and gender="male") and city!="bengaluru";
+
+5)Display students whose marks are greather than 7.0 and less than 8.0 from city hyderabad or bengaluru.
+---->select *from student where (marks>7.0 and marks<8.0) and (city="hyderabad" or city="bengaluru");
+
+6)Display students whose name starts with a and ends with a.
+---->select *from student where sname like "a%A";
+
+7)  Display number of students from each city.
+---->select count(sno),city from student group by city;
+
+8)Best city in education based on score.
+---->select city,avg(marks) as average_marks  from student group by city order by average_marks desc;
+
+9)Top score in each city.
+--->select city,max(marks) as marks from student group by city;
+
+10)Display topper details in hyderabad.
+---->select *from student where city="hyderabad" order by marks desc limit 1;
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+1)Find number of customers for each salespeoples 
+----->select sname,(select count(*) from customer where snum = salespeople.snum) as customer_count from salespeople;
+2. Best Salesperson based on customer rating
+>>> select sname from salespeople where snum = (select snum from customer order by rating desc limit 1);
 
-1)select s.sname from salespeoples as s,customers as c,orders as o where s.snum=c.snum and c.cnum=o.cnum and o.amt=(select max(o.amt) as hightest_sales from orders as o);
-2)select s.snum,count(c.cnum) from customers c,salespeoples s where c.snum=s.snum group by Find out which customers have placed the most orders.s.snum;
-3)select c.cnum,c.cname,count(o.onum) from customers c,orders o where o.cnum=c.cnum group by c.cnum,c.cname  order by count(o.onum) desc;
-4)select s.sname,avg(o.amt) from customers c,salespeoples s,orders o where s.snum=c.snum and c.cnum=o.cnum group by s.snum;
-5) select c.cname,c.cnum,o.amt from customers c,orders o where o.cnum=c.cnum and o.amt=(select max(o.amt) from orders o);
-6) select c.cname,c.cnum,o.amt from customers c,orders o where o.cnum=c.cnum and o.amt=(select max(o.amt) from orders o);
-7)select s.snum,avg(c.rating) from salespeoples s,customers c where s.snum=c.snum order by s.snum desc limit 1;
-8)
-9) select s.snum,s.sname,sum(o.amt) from salespeoples s,customers c,orders o where s.snum=c.snum and c.cnum=o.cnum group by s.sname;
-10)
+
+
+3. To whom we need to fire from salespeople team.
+>>> select sname from salespeople where snum = (select snum from customer order by rating asc limit 1);
+
+
+4. Who has less customer rating.
+>>> select cname from customer where rating = (select min(rating) from customer);
+
+
+
+5. Display salespeople who has customers from same city.
+>>> select sname from salespeople where snum in ( select snum from customer group by snum, city having count(distinct city) = 1);
+
+
+
+6. Find the names and numbers of all salespeople who had more than one customer.
+>>> select sname, snum from salespeople where snum in (select snum from customer group by snum having count(cnum) > 1);
+
+
+
+7. Find customers in San Jose who have a rating above 200.
+>>> select cname from customer where city = 'San Jose' and rating > 200;
+
+
+
+8. List all customers with ratings above San Jose’s average.   
+>>>select cname from customer where rating > (select avg(rating) from customer where city = 'San Jose');
+
+
 
 
 
