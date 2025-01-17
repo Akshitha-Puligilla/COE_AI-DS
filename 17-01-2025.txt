@@ -1,0 +1,27 @@
+import mysql.connector as c
+mydb= c.connect(
+    host="localhost",
+    user="root",
+    password="system",
+    database="mydb"
+)
+mycursor=mydb.cursor()
+id=input("enter the id")
+name=input("enter the name")
+dept=input('enter the dept')
+city=input('enter the city')
+mycursor.execute("create table doctor(docid varchar(20) primary key,docname varchar(20),dept varchar(20))")
+mycursor.execute("insert into doctor(docid,docname,dept) values(%s,%s,%s)",(id,name,dept))
+mycursor.execute("update doctor set dept=%s where docid=%s",(dept,id,))
+mycursor.execute("delete from doctor where docid=%s",(id,))
+mycursor.execute("select *from doctor")
+mycursor.execute("select *from doctor group by docname order by docname asc")
+mycursor.execute("select *from doctor where dept='psycology'")
+mycursor.execute("select *from doctor where docid between 1005 and 1200")
+mycursor.execute("alter table doctor add  city varchar(20)")
+mycursor.execute("update doctor set city=%s where docid=%s",(city,id,))
+mycursor.execute("select *from doctor where city like 'b%'")
+doctor=mycursor.fetchall()
+for id in doctor:
+    print(id)
+mydb.commit();
